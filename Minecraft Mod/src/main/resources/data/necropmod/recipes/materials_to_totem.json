@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " W ",
+    "NMN",
+    "EWE"
+  ],
+  "key": {
+    "W": {
+      "item": "minecraft:wither_skeleton_skull"
+    },
+    "N": {
+      "item": "minecraft:warped_planks"
+    },
+    "E": {
+      "item": "necropmod:essence_undeath"
+    },
+    "M": {
+      "item": "necropmod:boss_head"
+    }
+  },
+  "result": {
+    "item": "necropmod:totem_undeath",
+    "count": 1
+  }
+}

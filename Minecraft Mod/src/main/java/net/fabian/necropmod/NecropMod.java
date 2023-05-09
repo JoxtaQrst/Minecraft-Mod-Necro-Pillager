@@ -1,5 +1,6 @@
 package net.fabian.necropmod;
 
+import net.fabian.necropmod.block.ModBlocks;
 import net.fabian.necropmod.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
@@ -13,5 +14,6 @@ public class NecropMod implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModItems.registerModItems();
+		ModBlocks.registerModBlocks();
 	}
 }

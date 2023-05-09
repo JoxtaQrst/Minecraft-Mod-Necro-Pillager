@@ -10,6 +10,6 @@ import net.minecraft.util.Identifier;
 public class ModItemGroup {
     public static final ItemGroup NECRO_GROUP = FabricItemGroup.builder(new Identifier(NecropMod.MOD_ID))
             .displayName(Text.literal("Necro Pillager Mod"))
-            .icon(() -> new ItemStack(ModItems.RUNIC_WHIP))
+            .icon(() -> new ItemStack(ModItems.BOOS_HEAD))
             .build();
 }

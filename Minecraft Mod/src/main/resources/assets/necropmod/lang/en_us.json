@@ -1,4 +1,8 @@
 {
   "item.necropmod.runic_whip": "Runic Whip",
+  "item.necropmod.essence_undeath": "Essence of the Undeath",
+  "item.necropmod.boss_head": "Necro-Pillager's Head",
+  "item.necropmod.scythe": "Undead Collector",
+  "block.necropmod.totem_undeath": "Totem of Undeath",
   "itemGroup.necropmod.necro_group": "Necro Pillager Tab"
 }

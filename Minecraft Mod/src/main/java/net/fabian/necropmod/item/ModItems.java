@@ -12,13 +12,29 @@ import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.fabian.necropmod.item.RunicWhip;
+import net.minecraft.util.Rarity;
 
 public class ModItems {
 
     public static final Item RUNIC_WHIP = registerItem("runic_whip",
-            new RunicWhip(new Item.Settings()),
+            new RunicWhip(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)),
             ModItemGroup.NECRO_GROUP
     );
+
+    public static final Item ESSENCE_UNDEATH = registerItem("essence_undeath",
+            new EssenceOfUndeath(new Item.Settings().rarity(Rarity.RARE)),
+            ModItemGroup.NECRO_GROUP
+            );
+
+    public static final Item BOOS_HEAD = registerItem("boss_head",
+            new BossHead(new Item.Settings().maxCount(1).rarity(Rarity.EPIC)),
+            ModItemGroup.NECRO_GROUP
+            );
+
+    public static final Item SCYTHE = registerItem("scythe",
+            new Scythe(new Item.Settings().rarity(Rarity.EPIC)),
+            ModItemGroup.NECRO_GROUP
+            );
 
 
     private static Item registerItem(String name, Item item, ItemGroup group) {

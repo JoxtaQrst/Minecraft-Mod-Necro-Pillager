@@ -1,17 +1,17 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "necropmod:item/runic_whip"
+    "layer0": "necropmod:item/essence_undeath"
   },
   "display": {
     "thirdperson_righthand": {
-      "rotation": [ 0, 90, 0 ],
-      "translation": [ 0, 1, -3 ],
+      "rotation": [ 0, 0, 0 ],
+      "translation": [ 0, 0, 0 ],
       "scale": [ 0.55, 0.55, 0.55 ]
     },
     "firstperson_lefthand": {
-      "rotation": [ 0, -180, 0],
-      "translation": [ 0, 4, 1 ],
+      "rotation": [ 0, 0, 0],
+      "translation": [ 0, 0, 0 ],
       "scale": [ 10, 0.4, 0.4 ]
     }
   }
