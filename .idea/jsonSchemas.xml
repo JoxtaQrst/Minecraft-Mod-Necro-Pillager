@@ -3,6 +3,22 @@
   <component name="JsonSchemaMappingsProjectConfiguration">
     <state>
       <map>
+        <entry key="Minecraft Data Pack Loot Table">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Minecraft Data Pack Loot Table" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/minecraft-loot-table.json" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="Minecraft Mod/src/main/resources/data/necropmod/loot_tables/entities/skeleton.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
         <entry key="Minecraft Data Pack Recipe">
           <value>
             <SchemaInfo>
@@ -13,6 +29,9 @@
                 <list>
                   <Item>
                     <option name="path" value="Minecraft Mod/src/main/resources/data/necropmod/loot_tables/recipes/materials_to_totem.json" />
+                  </Item>
+                  <Item>
+                    <option name="path" value="Minecraft Mod/src/main/resources/data/necropmod/recipes/materials_to_totem.json" />
                   </Item>
                 </list>
               </option>

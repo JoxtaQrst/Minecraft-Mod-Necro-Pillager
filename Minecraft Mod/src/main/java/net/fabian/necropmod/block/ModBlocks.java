@@ -1,6 +1,7 @@
 package net.fabian.necropmod.block;
 
 import net.fabian.necropmod.NecropMod;
+import net.fabian.necropmod.block.custom.AnimatedBlock;
 import net.fabian.necropmod.item.ModItemGroup;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
@@ -17,8 +18,11 @@ import net.minecraft.util.Identifier;
 public class ModBlocks {
 
 
-    public static final Block TOTEM_UNDEATH = registerBlock("totem_undeath",
-            new Block(FabricBlockSettings.of(Material.WOOD).strength(3.0f)), ModItemGroup.NECRO_GROUP);
+//    public static final Block TOTEM_UNDEATH = registerBlock("totem_undeath",
+//            new AnimatedBlock(FabricBlockSettings.of(Material.WOOD).strength(3.0f)), ModItemGroup.NECRO_GROUP);
+
+    public static final Block TOTEM_UNDEATH = Registry.register(Registries.BLOCK,new Identifier(NecropMod.MOD_ID,"totem"),
+            new AnimatedBlock(FabricBlockSettings.of(Material.WOOD).strength(3.0f).nonOpaque()));
 
     private static Block registerBlock(String name, Block block,ItemGroup group){
         registerBlockItem(name,block,group);
