@@ -14,8 +14,8 @@ public class NecroModClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         EntityRendererRegistry.register(ModEntities.BOSS, BossRenderer::new);
-        EntityRendererRegistry.register(ModEntities.BOSS_PROJECTILE,
-                (EntityRendererFactory.Context context) -> new BossProjectileRenderer(context));
+        EntityRendererRegistry.register(ModEntities.BOSS_PROJECTILE, BossProjectileRenderer::new);
+
 
         BlockEntityRendererFactories.register(ModBlockEntities.ANIMATED_BLOCK_ENTITY, AnimatedBlockRenderer::new);
 

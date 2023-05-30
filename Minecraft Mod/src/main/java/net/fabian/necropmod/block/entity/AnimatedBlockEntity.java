@@ -1,11 +1,15 @@
 package net.fabian.necropmod.block.entity;
 
 import net.fabian.necropmod.block.custom.AnimatedBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -26,19 +30,18 @@ public class AnimatedBlockEntity extends BlockEntity implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this,"contrller",0,this::predicate));
+        controllerRegistrar.add(new AnimationController<>(this,"controller",0,this::predicate));
     }
 
     private <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState) {
         BlockState state = this.world.getBlockState(this.pos);
         if(state.getBlock() instanceof AnimatedBlock){
             Direction facing = state.get(AnimatedBlock.FACING);
-            tAnimationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+            tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.model.idle", Animation.LoopType.LOOP));
 
         }
         return PlayState.CONTINUE;
     }
-
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {

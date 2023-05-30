@@ -5,5 +5,7 @@
   "item.necropmod.scythe": "Undead Collector",
   "item.necropmod.boss_egg": "Necro Pillager Spawn Egg",
   "block.necropmod.totem": "Totem of Undeath",
+  "advancements.necropmo.boss.title": "Necro-Boom! Pillager Necromancer Slain!",
+  "advancements.necropmod.boss.description": "You've vanquished the mighty Pillager Necromancer and put an end to their mischievous necromancy! Congratulations!",
   "itemGroup.necropmod.necro_group": "Necro Pillager Tab"
 }

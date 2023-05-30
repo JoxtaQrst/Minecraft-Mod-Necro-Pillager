@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class AnimatedBlockItem extends BlockItem implements GeoItem {
-    private AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
+    private final AnimatableInstanceCache cache = new SingletonAnimatableInstanceCache(this);
     private final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
     public AnimatedBlockItem(Block block, Settings settings) {
         super(block, settings);
@@ -43,11 +43,11 @@ public class AnimatedBlockItem extends BlockItem implements GeoItem {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
-        controllerRegistrar.add(new AnimationController<>(this,"contrller",0,this::predicate));
+        controllerRegistrar.add(new AnimationController<>(this,"controller",0,this::predicate));
     }
 
     private <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState) {
-        tAnimationState.getController().setAnimation(RawAnimation.begin().then("idle", Animation.LoopType.LOOP));
+        tAnimationState.getController().setAnimation(RawAnimation.begin().then("animation.model.idle", Animation.LoopType.LOOP));
         return PlayState.CONTINUE;
     }
 

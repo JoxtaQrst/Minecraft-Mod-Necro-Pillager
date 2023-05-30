@@ -4,7 +4,8 @@
   "package": "net.fabian.necropmod.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "SkeletonEntityMixin"
+    "SkeletonEntityMixin",
+    "BossSpawnMixin"
   ],
   "client": [
     "ExampleMixin"

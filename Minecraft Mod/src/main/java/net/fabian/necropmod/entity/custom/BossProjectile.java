@@ -3,18 +3,22 @@ package net.fabian.necropmod.entity.custom;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
 
 public class BossProjectile extends ProjectileEntity {
     private LivingEntity targetEntity;
@@ -33,71 +37,79 @@ public class BossProjectile extends ProjectileEntity {
     }
 
     @Override
-    protected void onCollision(HitResult hitResult) {
-        super.onCollision(hitResult);
-        // Check if the projectile hit an entity
-        if (hitResult.getType() == HitResult.Type.ENTITY) {
-            System.out.println("Hit the Player!");
-            EntityHitResult entityHitResult = (EntityHitResult) hitResult;
-            Entity target = entityHitResult.getEntity();
+    protected void onEntityHit(EntityHitResult entityHitResult) {
+        super.onEntityHit(entityHitResult);
 
-            if (target instanceof LivingEntity) {
-                LivingEntity livingTarget = (LivingEntity) target;
+        Entity target = entityHitResult.getEntity();
+        if (target instanceof LivingEntity livingTarget) {
+            // damage
+            livingTarget.damage(world.getDamageSources().magic(), 2.0F);
 
-                // Same actions as in your previous onEntityHit method
-                if (livingTarget.isBlocking() && livingTarget.getActiveItem().equals(ItemStack.EMPTY)) {
-                    this.world.playSound(null,this.getX(),this.getY(),this.getZ(), SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER,this.getSoundCategory(), 1.0F, 0.5F);
-                }
-                livingTarget.damage(BossDamageSources.getProjectileSource(this, owner), 5.0F);
-                livingTarget.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 30));
-                this.world.createExplosion(this, this.getX(), this.getY(), this.getZ(), 2.0F, World.ExplosionSourceType.NONE);
-                this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, hitResult.getPos(), GameEvent.Emitter.of(this, null));
-
-            }
         }
+        this.world.createExplosion(this, this.getX(), this.getBodyY(0.5D), this.getZ(), 2.0F, World.ExplosionSourceType.NONE);
 
-        // Remove the projectile after it hits something
+
+        // Elimin proiectilul
         this.remove(Entity.RemovalReason.DISCARDED);
     }
 
+    @Override
+    protected void onCollision(HitResult hitResult) {
+        super.onCollision(hitResult);
+
+        // Eliminați proiectilul după ce a avut o coliziune
+        this.remove(Entity.RemovalReason.DISCARDED);
+    }
 
     @Override
     public void tick() {
+        super.tick();
+        // Actualizați poziția proiectilului în funcție de viteză și direcție
+        this.move(MovementType.SELF, this.getVelocity());
+        spawnProjectileTrailParticles(this);
+        // Verificați dacă proiectilul a atins jucătorul
+        if (this.targetEntity instanceof PlayerEntity player && this.squaredDistanceTo(this.targetEntity) < 1.0D) {
 
-        // Update the projectile's motion to move towards the target
-        if (this.targetEntity != null ) {
-            this.emitGameEvent(GameEvent.PROJECTILE_SHOOT, owner);
-            this.hasNoGravity();
-            double deltaX = this.targetEntity.getX() - this.getX();
-            double deltaY = this.targetEntity.getBodyY(0.5D) - this.getY();
-            double deltaZ = this.targetEntity.getZ() - this.getZ();
-            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
-            double speed = 0.05D; // Adjust the speed of the projectile
-            if(doesNotCollide(deltaX,deltaY,deltaZ)){
+            // Check if the player is blocking with a shield
+            if (player.isBlocking() && player.getActiveItem().getItem() instanceof ShieldItem) {
+                // Play a sound to indicate that the projectile was blocked
+                //Durabiliy of the shield
+                player.getActiveItem().damage(1,player,(p) -> p.sendToolBreakStatus(player.getActiveHand()));
 
-                // Set the velocity of the projectile
-                double velocityX = deltaX / distance * speed;
-                double velocityY = deltaY / distance * speed;
-                double velocityZ = deltaZ / distance * speed;
-                this.setVelocity(velocityX, velocityY, velocityZ);
+                this.world.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-                // Manually update the projectile's position based on its velocity
-                this.updatePosition(this.getX() + velocityX, this.getY() + velocityY, this.getZ() + velocityZ);
-
-                System.out.println();
-                System.out.println("deltaX: " + deltaX + ", deltaY: " + deltaY + ", deltaZ: " + deltaZ);
-                System.out.println("distance: " + distance);
-                System.out.println("velocity: " + (deltaX / distance * speed) + ", " + (deltaY / distance * speed) + ", " + (deltaZ / distance * speed));
-                System.out.println();
-
+                // Eliminați proiectilul după ce a fost blocat de către jucător
+                this.remove(Entity.RemovalReason.DISCARDED);
+                return;
             }
 
-        }
+            // Apply damage and effects to the player if not blocked
+            this.targetEntity.damage(world.getDamageSources().magic(), 2.0F);
+            this.targetEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.WITHER, 40, 1));
 
-        if (this.age >= 200) {
+
+            // Eliminați proiectilul după ce a atins jucătorul
             this.remove(Entity.RemovalReason.DISCARDED);
         }
+    }
 
+    private void spawnProjectileTrailParticles(BossProjectile projectile) {
+        if (projectile.world instanceof ServerWorld serverWorld) {
+
+            // Spawn particles around the projectile
+            int particleCount = 5;
+            double trailRadius = 0.2; // Adjust the radius of the particle trail
+
+            for (int i = 0; i < particleCount; i++) {
+                double angle = ((double) i / particleCount) * 2.0 * Math.PI;
+                double offsetX = Math.cos(angle) * 0;
+                double offsetY = Math.sin(angle) * trailRadius;
+
+                serverWorld.spawnParticles(ParticleTypes.SOUL,
+                        projectile.getX() + offsetX, projectile.getY() + offsetY, projectile.getZ() + offsetX,
+                        1, 0.0, 0.0, 0.0, 0.0);
+            }
+        }
     }
 
 
